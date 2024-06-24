@@ -55,3 +55,6 @@ if __name__ == "__main__":
     for path, folders, files in os.walk(arguments.path):
         if "whatsapp" in path:
                 paths.extend([f"{path}/{file}" for file in files if "sqlite" in file])
+    contacts = {}
+    for path in paths:
+        contacts.update(path)
