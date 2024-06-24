@@ -43,14 +43,14 @@ def getContacts(file_path):
 
 if __name__ == "__main__":
     arguments = get_arguments(('-p', "--path", "path", f"Path to Firefox Cache Folder (Default={default_path})"),
-                              ('-w', "--write", "write", "Write to File (Default=Current Date and Time)"))
+                              ('-w', "--write", "write", "Write to CSV File (Default=Current Date and Time)"))
     if not arguments.path:
         arguments.path = default_path
     if not os.path.isdir(arguments.path):
         display('-', f"No Directory as {Back.YELLOW}{arguments.path}{Back.RESET}")
         exit(0)
     if not arguments.write:
-        arguments.write = f"{date.today()} {strftime('%H_%M_%S', localtime())}"
+        arguments.write = f"{date.today()} {strftime('%H_%M_%S', localtime())}.csv"
     paths = []
     for path, folders, files in os.walk(arguments.path):
         if "whatsapp" in path:
@@ -60,3 +60,6 @@ if __name__ == "__main__":
         contacts.update(getContacts(path))
     display('+', f"Total Contacts => {Back.MAGENTA}{len(contacts)}{Back.RESET}")
     print('\n'.join([f"* {Fore.CYAN}{contact}{Fore.RESET} : {Fore.BLUE}{name}{Fore.RESET}" for contact, name in contacts.items()]))
+    with open(arguments.write, 'w') as file:
+        file.write('Name,Contact\n')
+        file.write('\n'.join([f"{name},{contact}" for name, contact in contacts.items()]))
