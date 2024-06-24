@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 
 import os
+from pathlib import Path
 from datetime import date
 from optparse import OptionParser
 from colorama import Fore, Back, Style
@@ -36,3 +37,7 @@ if __name__ == "__main__":
         exit(0)
     if not arguments.write:
         arguments.write = f"{date.today()} {strftime('%H_%M_%S', localtime())}"
+    paths = []
+    for path, folders, files in os.walk(arguments.path):
+        if "whatsapp" in path:
+                paths.extend([f"{path}/{file}" for file in files if "sqlite" in file])
