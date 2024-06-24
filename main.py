@@ -58,3 +58,5 @@ if __name__ == "__main__":
     contacts = {}
     for path in paths:
         contacts.update(getContacts(path))
+    display('+', f"Total Contacts => {Back.MAGENTA}{len(contacts)}{Back.RESET}")
+    print('\n'.join([f"* {Fore.CYAN}{contact}{Fore.RESET} : {Fore.BLUE}{name}{Fore.RESET}" for contact, name in contacts.items()]))
