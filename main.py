@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 
-import os
+import os, subprocess
 from pathlib import Path
 from datetime import date
 from optparse import OptionParser
@@ -26,6 +26,20 @@ def get_arguments(*args):
     for arg in args:
         parser.add_option(arg[0], arg[1], dest=arg[2], help=arg[3])
     return parser.parse_args()[0]
+
+def getContacts(file_path):
+    strings = subprocess.check_output(["strings", file_path]).decode().split('\n')
+    contacts = {}
+    contacts_indexes = [[index, line.split(',')[1].split('@')[0].split('"')[1]] for index, line in enumerate(strings) if "contact" in line and "whatsapp" in line]
+    for index, number in contacts_indexes:
+        try:
+            inner_index = 1
+            while "4binarySyncData" not in strings[index+inner_index-1]:
+                inner_index += 1
+            contacts[number] = strings[index+inner_index].strip()
+        except:
+            contacts[number] = ''
+    return contacts
 
 if __name__ == "__main__":
     arguments = get_arguments(('-p', "--path", "path", f"Path to Firefox Cache Folder (Default={default_path})"),
