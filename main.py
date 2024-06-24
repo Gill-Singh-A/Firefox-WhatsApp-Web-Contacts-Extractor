@@ -57,4 +57,4 @@ if __name__ == "__main__":
                 paths.extend([f"{path}/{file}" for file in files if "sqlite" in file])
     contacts = {}
     for path in paths:
-        contacts.update(path)
+        contacts.update(getContacts(path))
